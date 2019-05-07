@@ -1,4 +1,5 @@
 import random
+from Classes.magic import Magic
 
 class colors:
     top = '\033[95m'
@@ -12,7 +13,7 @@ class colors:
 
 
 class Person:
-    def __init__(self, hp, mp, atk, defs, magic):
+    def __init__(self, hp, mp, atk, defs, magic, items):
         self.maxhp = hp
         self.hp = hp
         self.maxmp = mp
@@ -20,8 +21,9 @@ class Person:
         self.lowatk = atk - 10
         self.highatk = atk + 10
         self.defs = defs
+        self.items = items
         self.magic = magic
-        self.actions = ["Attack", "Magic"]
+        self.actions = ["Attack", "Magic", "Items"]
 
     def damage_generator(self):
         return random.randrange(self.lowatk, self.highatk)
@@ -36,6 +38,11 @@ class Person:
         if self.hp < 0:
             self.hp = 0
         return self.hp
+
+    def heal(self, heal_pts):
+        self.hp += heal_pts
+        if self.hp >= self.maxhp:
+            self.hp = self.maxhp
 
     def get_hp(self):
         return self.hp
@@ -56,18 +63,25 @@ class Person:
         return self.magic[i]["name"]
 
     def get_magic_cost(self, i):
-        return self.magic[i]["name"]
+        return self.magic[i]["cost"]
 
     def select_action(self):
         i = 1
         print(colors.okblue + colors.bold + "Actions" + colors.end)
         for item in self.actions:
-            print(str(i) + ":", item)
+            print("      " + str(i) + ":", item)
             i += 1
 
     def choose_magic(self):
         i = 1
         print(colors.okblue + colors.bold + "Magic Options" + colors.end)
         for power in self.magic:
-            print(str(i) + ":", power["name"], "(cost:", str(power["cost"]) + ")")
+            print("      " + str(i) + ":",  power.name, "(cost:", str(power.cost) + ")")
+            i += 1
+
+    def choose_item(self):
+        i = 1
+        print(colors.okgreen + colors.bold + "Items: " + colors.end)
+        for item in self.items:
+            print("      " + str(i) + ": "+ item["item"].name, item["item"].description, "(x" + str(item["quantity"]) + ")")
             i += 1
