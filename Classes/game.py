@@ -13,7 +13,8 @@ class colors:
 
 
 class Person:
-    def __init__(self, hp, mp, atk, defs, magic, items):
+    def __init__(self, name, hp, mp, atk, defs, magic, items):
+        self.name = name
         self.maxhp = hp
         self.hp = hp
         self.maxmp = mp
@@ -85,3 +86,58 @@ class Person:
         for item in self.items:
             print("      " + str(i) + ": "+ item["item"].name, item["item"].description, "(x" + str(item["quantity"]) + ")")
             i += 1
+
+    def get_info(self):
+        hp_bar = ""
+        bar_length = (self.hp / self.maxhp) * 100 / 4
+        mp_bar = ""
+        mp_length = (self.mp / self.maxmp) * 100 / 10
+        #empty_bars =
+
+        while bar_length > 0:
+            hp_bar += "█"
+            bar_length -= 1
+
+        while len(hp_bar) < 25:
+            hp_bar += " "
+
+        while mp_length > 0:
+            mp_bar += "█"
+            mp_length -= 1
+
+        while len(mp_bar) < 10:
+            mp_bar += " "
+
+        hp_string = str(self.hp) + "/" + str(self.maxhp)
+        current_hp = ""
+
+        if len(hp_string) < 9:
+            decreased = 9 - len(hp_string)
+
+            while decreased > 0:
+                current_hp += " "
+                decreased -= 1
+
+            current_hp += hp_string
+        else:
+            current_hp = hp_string
+
+        mp_string = str(self.mp) + "/" + str(self.maxmp)
+        current_mp = ""
+
+        if len(mp_string) < 7:
+            decreased = 7 - len(mp_string)
+            while decreased > 0:
+                current_mp += " "
+                decreased -= 1
+
+            current_mp += mp_string
+        else:
+            current_mp = mp_string
+
+
+
+        print("                      -------------------------                 ----------")
+        print(colors.bold + self.name + "      " +
+              current_hp + "|" + colors.okgreen + hp_bar +colors.end + "|"  + "      " +
+              current_mp + "|" + colors.okblue + mp_bar + colors.end + "|")
